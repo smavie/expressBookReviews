@@ -5,10 +5,6 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 
-public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
-});
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
@@ -74,7 +70,7 @@ public_users.get('/review/:isbn', function (req, res) {
 });
 
 // Register a new user
-public_users.post("/user/register", (req, res) => {
+public_users.post("/register", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
