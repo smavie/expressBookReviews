@@ -7,24 +7,50 @@ const public_users = express.Router();
 
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  res.send(JSON.stringify(books, null,4));
-  return res.status(300).json({message: "Full book list"});
+// Get the full list of books
+public_users.get('/', (req, res) => {
+  // Wrapping the synchronous operation in a Promise
+  const getBooks = new Promise((resolve, reject) => {
+    try {
+      resolve(books);
+    } catch (err) {
+      reject("Error retrieving book list.");
+    }
+  });
+
+  getBooks
+    .then((bookList) => {
+      res.status(200).json({ message: "Full book list", books: bookList });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: error });
+    });
 });
 
 // Get book details based on ISBN
 
-public_users.get("/books/:isbn", (req, res) => {
+// Get book details based on ISBN
+public_users.get('/books/:isbn', (req, res) => {
   const { isbn } = req.params;
 
-  // Find the book with the given ISBN
-  const book = Object.values(books).find((b) => b.isbn === isbn);
+  // Wrapping the book search in a Promise
+  const getBookByISBN = new Promise((resolve, reject) => {
+    const book = Object.values(books).find((b) => b.isbn === isbn);
 
-  if (book) {
-    res.status(200).json({ message: "Book found", book });
-  } else {
-    res.status(404).json({ message: "Book not found" });
-  }
+    if (book) {
+      resolve(book);
+    } else {
+      reject("Book not found");
+    }
+  });
+
+  getBookByISBN
+    .then((book) => {
+      res.status(200).json({ message: "Book found", book });
+    })
+    .catch((error) => {
+      res.status(404).json({ message: error });
+    });
 });
   
 // Endpoint to get books by author
