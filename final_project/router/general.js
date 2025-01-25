@@ -57,29 +57,46 @@ public_users.get('/books/:isbn', (req, res) => {
 public_users.get('/author/:author', function (req, res) {
   const { author } = req.params;
 
-  // Get all the books and filter by author
-  const matchingBooks = Object.values(books).filter((book) => book.author.toLowerCase() === author.toLowerCase());
+  // Create a promise to fetch books and filter by author
+  new Promise((resolve, reject) => {
+    const matchingBooks = Object.values(books).filter((book) => book.author.toLowerCase() === author.toLowerCase());
 
-  if (matchingBooks.length > 0) {
-    res.status(200).json({ message: "Books found", books: matchingBooks });
-  } else {
-    res.status(404).json({ message: `No books found by author: ${author}` });
-  }
+    if (matchingBooks.length > 0) {
+      resolve(matchingBooks);  // Resolve with matching books
+    } else {
+      reject(`No books found by author: ${author}`);  // Reject with message if no books found
+    }
+  })
+    .then((matchingBooks) => {
+      res.status(200).json({ message: "Books found", books: matchingBooks });
+    })
+    .catch((err) => {
+      res.status(404).json({ message: err });
+    });
 });
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
+public_users.get('/title/:title', function (req, res) {
   const { title } = req.params;
 
-  // Get all the books and filter by author
-  const matchingBooks = Object.values(books).filter((book) => book.title.toLowerCase() === title.toLowerCase());
+  // Create a promise to fetch books and filter by title
+  new Promise((resolve, reject) => {
+    const matchingBooks = Object.values(books).filter((book) => book.title.toLowerCase() === title.toLowerCase());
 
-  if (matchingBooks.length > 0) {
-    res.status(200).json({ message: "Books found", books: matchingBooks });
-  } else {
-    res.status(404).json({ message: `No books found by author: ${author}` });
-  }
+    if (matchingBooks.length > 0) {
+      resolve(matchingBooks);  // Resolve with matching books
+    } else {
+      reject(`No books found with title: ${title}`);  // Reject with message if no books found
+    }
+  })
+    .then((matchingBooks) => {
+      res.status(200).json({ message: "Books found", books: matchingBooks });
+    })
+    .catch((err) => {
+      res.status(404).json({ message: err });
+    });
 });
+
 
 // Endpoint to get reviews for a book by ISBN
 public_users.get('/review/:isbn', function (req, res) {
