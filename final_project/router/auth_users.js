@@ -96,6 +96,37 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   });
 });
 
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const isbn = req.params.isbn; // Get the ISBN from the request parameter
+    const username = req.session.authorization?.username; // Get the username from the session
+
+    // Check if the user is logged in
+    if (!username) {
+        return res.status(403).json({ message: "User not logged in" });
+    }
+
+    // Find the book by ISBN
+    const book = Object.values(books).find((b) => b.isbn === isbn);
+
+    if (!book) {
+        return res.status(404).json({ message: `Book with ISBN ${isbn} not found` });
+    }
+
+    // Check if the book has reviews
+    if (!book.reviews || !book.reviews[username]) {
+        return res.status(404).json({ message: "Review not found for the logged-in user" });
+    }
+
+    // Delete the user's review
+    delete book.reviews[username];
+
+    return res.status(200).json({
+        message: `Review for ISBN ${isbn} deleted successfully.`,
+        reviews: book.reviews, // Return updated reviews for the book
+    });
+});
+
+
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
