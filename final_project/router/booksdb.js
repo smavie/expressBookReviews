@@ -4,7 +4,7 @@ let books = {
       3: {"author": "Dante Alighieri","title": "The Divine Comedy", "isbn": "GHI-489", "reviews": {} },
       4: {"author": "Unknown","title": "The Epic Of Gilgamesh", "isbn": "IJK-012", "reviews": {} },
       5: {"author": "Unknown","title": "The Book Of Job", "isbn": "LMN-345", "reviews": {} },
-      6: {"author": "Unknown","title": "One Thousand and One Nights", "isbn": "OPQ-678", "reviews": {} },
+      6: {"author": "Unknown","title": "One Thousand and One Nights", "isbn": "OPQ-678", "reviews": {"name": "Bom Smith", "name:": "Mary Bricks"} },
       7: {"author": "Unknown","title": "Nj\u00e1l's Saga", "isbn": "RST-901", "reviews": {} },
       8: {"author": "Jane Austen","title": "Pride and Prejudice", "isbn": "UVW-234", "reviews": {} },
       9: {"author": "Honor\u00e9 de Balzac","title": "Le P\u00e8re Goriot", "isbn": "XYZ-567", "reviews": {} },
